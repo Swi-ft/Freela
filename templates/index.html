@@ -1,0 +1,451 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="main-wrapper">
+
+  <!-- Hero Banner matching the provided image design -->
+  <section class="hero-banner">
+    <div class="hero-left">
+      <h1 class="hero-title">Find the right freelancer for your next project</h1>
+      <p class="hero-subtitle">Hire skilled professionals for any task, with cryptographic Zero-Knowledge proof eligibility verification.</p>
+      
+      <form action="{{ url_for('home') }}" method="GET" class="search-bar-wrap">
+        <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+        <input 
+          type="text" 
+          name="q" 
+          value="{{ search_query }}" 
+          class="search-input" 
+          placeholder="Search for services (e.g. web development, design, writing...)"
+        >
+        <button type="submit" class="search-btn">Search</button>
+      </form>
+    </div>
+
+    <!-- Right SVG Illustration matching the character in image -->
+    <div class="hero-right">
+      <svg class="hero-illustration" viewBox="0 0 420 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Floating badge: Code -->
+        <g transform="translate(240, 15)">
+          <rect width="52" height="42" rx="10" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+          <text x="13" y="27" font-family="monospace" font-size="16" font-weight="bold" fill="#0f172a">&lt;/&gt;</text>
+        </g>
+        
+        <!-- Floating badge: Edit/Pen -->
+        <g transform="translate(345, 20)">
+          <rect width="48" height="42" rx="10" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+          <path d="M20 26l8-8m0 0l2-2a2 2 0 012.8 2.8l-2 2m-2.8-2.8l-8 8m0 0H18v2h2l8-8" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+        </g>
+
+        <!-- Floating badge: Analytics Chart -->
+        <g transform="translate(220, 110)">
+          <rect width="50" height="42" rx="10" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+          <path d="M232 140v-8m5 8v-14m5 8v-19" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+        </g>
+
+        <!-- Potted Plant on desk -->
+        <g transform="translate(370, 175)">
+          <path d="M5 25h16l-3 18H8L5 25z" fill="#f8fafc" stroke="#0f172a" stroke-width="2"/>
+          <path d="M13 25c-5-10-15-6-12 2 3-5 9-3 12-2z" fill="#34d399" stroke="#0f172a" stroke-width="1.5"/>
+          <path d="M13 25c5-12 16-6 12 3-3-6-9-4-12-3z" fill="#10b981" stroke="#0f172a" stroke-width="1.5"/>
+        </g>
+
+        <!-- Character working on laptop -->
+        <g transform="translate(250, 70)">
+          <!-- Head & Hair -->
+          <circle cx="85" cy="50" r="26" fill="#fde68a" stroke="#0f172a" stroke-width="2"/>
+          <path d="M60 50c0-16 10-28 26-28 14 0 26 10 26 22 0 0-8-12-24-12-14 0-22 10-28 18z" fill="#0f172a"/>
+          <!-- Smiling face -->
+          <circle cx="78" cy="48" r="2.5" fill="#0f172a"/>
+          <circle cx="92" cy="48" r="2.5" fill="#0f172a"/>
+          <path d="M80 57q5 4 10 0" stroke="#0f172a" stroke-width="2" fill="none" stroke-linecap="round"/>
+          
+          <!-- Green Sweatshirt Body -->
+          <path d="M45 130c0-30 20-45 40-45s40 15 40 45H45z" fill="#10b981" stroke="#0f172a" stroke-width="2"/>
+          
+          <!-- Desk line -->
+          <line x1="-30" y1="130" x2="160" y2="130" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
+
+          <!-- Sleek Laptop open with Apple-style / Freela logo dot -->
+          <path d="M5 125l32-42h54l-14 42H5z" fill="#1e293b" stroke="#0f172a" stroke-width="2"/>
+          <circle cx="48" cy="104" r="3.5" fill="#ffffff"/>
+          <line x1="-5" y1="128" x2="85" y2="128" stroke="#64748b" stroke-width="3"/>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Categories Horizontal Filter Bar matching image -->
+  <div class="categories-bar">
+    <a href="{{ url_for('home') }}" class="cat-pill {% if current_category == 'all' %}active{% endif %}">
+      <i class="fa-solid fa-layer-group"></i> All Categories
+    </a>
+    <a href="{{ url_for('home', category='Web Development') }}" class="cat-pill {% if current_category == 'Web Development' %}active{% endif %}">
+      <i class="fa-solid fa-code"></i> Web Development
+    </a>
+    <a href="{{ url_for('home', category='Design & Graphics') }}" class="cat-pill {% if current_category == 'Design & Graphics' %}active{% endif %}">
+      <i class="fa-solid fa-palette"></i> Design & Graphics
+    </a>
+    <a href="{{ url_for('home', category='Writing & Content') }}" class="cat-pill {% if current_category == 'Writing & Content' %}active{% endif %}">
+      <i class="fa-solid fa-file-lines"></i> Writing & Content
+    </a>
+    <a href="{{ url_for('home', category='Data & Analytics') }}" class="cat-pill {% if current_category == 'Data & Analytics' %}active{% endif %}">
+      <i class="fa-solid fa-chart-simple"></i> Data & Analytics
+    </a>
+    <a href="{{ url_for('home', category='Business') }}" class="cat-pill {% if current_category == 'Business' %}active{% endif %}">
+      <i class="fa-solid fa-briefcase"></i> Business
+    </a>
+    <a href="{{ url_for('home', category='Others') }}" class="cat-pill {% if current_category == 'Others' %}active{% endif %}">
+      <i class="fa-solid fa-ellipsis"></i> Others
+    </a>
+  </div>
+
+  <!-- If Freelancer is logged in, show their Private Credential Stats Card -->
+  {% if current_freelancer %}
+  <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 18px 24px; margin-bottom: 32px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow-sm); flex-wrap: wrap; gap: 16px;">
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <div style="width: 44px; height: 44px; border-radius: 50%; background: #ecfdf5; color: #059669; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+        <i class="fa-solid fa-user-shield"></i>
+      </div>
+      <div>
+        <div style="font-size: 15px; font-weight: 700; color: #0f172a;">
+          Freelancer Private Reputation Vault (Signed Credential)
+        </div>
+        <div style="font-size: 13px; color: #64748b;">
+          Logged in as <strong>{{ current_freelancer.full_name }}</strong>. These stats remain completely secret during Noir ZK proof generation.
+        </div>
+      </div>
+    </div>
+    
+    <div style="display: flex; gap: 20px; align-items: center;">
+      <div style="text-align: center;">
+        <span style="font-size: 11px; text-transform: uppercase; color: #94a3b8; font-weight: 700; display: block;">Rating</span>
+        <span style="font-size: 16px; font-weight: 800; color: #0f172a;"><i class="fa-solid fa-star" style="color: #f59e0b; font-size: 13px;"></i> {{ current_freelancer.rating_score }}</span>
+      </div>
+      <div style="text-align: center; border-left: 1px solid #e2e8f0; padding-left: 20px;">
+        <span style="font-size: 11px; text-transform: uppercase; color: #94a3b8; font-weight: 700; display: block;">Jobs Done</span>
+        <span style="font-size: 16px; font-weight: 800; color: #0f172a;">{{ current_freelancer.completed_jobs }}</span>
+      </div>
+      <div style="text-align: center; border-left: 1px solid #e2e8f0; padding-left: 20px;">
+        <span style="font-size: 11px; text-transform: uppercase; color: #94a3b8; font-weight: 700; display: block;">On-Time %</span>
+        <span style="font-size: 16px; font-weight: 800; color: #10b981;">{{ current_freelancer.on_time_rate }}%</span>
+      </div>
+      <div style="text-align: center; border-left: 1px solid #e2e8f0; padding-left: 20px;">
+        <span style="font-size: 11px; text-transform: uppercase; color: #94a3b8; font-weight: 700; display: block;">Disputes</span>
+        <span style="font-size: 16px; font-weight: 800; color: #ef4444;">{{ current_freelancer.dispute_count }}</span>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Popular Services / Open Jobs Section Header -->
+  <div class="section-header" id="browse">
+    <h2 class="section-title">Popular Services &amp; Open Gigs</h2>
+    <a href="{{ url_for('home') }}" class="view-all-link">View All <i class="fa-solid fa-arrow-right"></i></a>
+  </div>
+
+  <!-- Jobs Cards Grid -->
+  <div class="jobs-grid">
+    {% for job in jobs %}
+    <div class="job-card">
+      
+      <!-- Visual Card Thumbnail reflecting Category -->
+      <div class="card-thumbnail">
+        <span class="zk-shield-badge">
+          <i class="fa-solid fa-shield-halved"></i> ZK Proof Required
+        </span>
+        
+        {% if job.category == 'Web Development' %}
+        <div class="thumb-code-preview">
+          <span style="color: #94a3b8;">// ZK Verified Contract</span><br>
+          <span style="color: #f43f5e;">fn</span> <span style="color: #38bdf8;">verify_applicant</span>() {<br>
+          &nbsp;&nbsp;<span style="color: #a855f7;">assert</span>(rating &gt;= {{ job.min_rating }});<br>
+          &nbsp;&nbsp;<span style="color: #a855f7;">assert</span>(jobs &gt;= {{ job.min_completed_jobs }});<br>
+          }
+        </div>
+        {% elif job.category == 'Design & Graphics' %}
+        <div class="thumb-design-preview">
+          <div class="thumb-design-box">
+            Brand Identity
+          </div>
+        </div>
+        {% elif job.category == 'Writing & Content' %}
+        <div class="thumb-content-preview">
+          <p>"Write SEO-optimized blog posts for applied cryptography &amp; zero-knowledge protocols..."</p>
+        </div>
+        {% else %}
+        <div class="thumb-data-preview">
+          <div class="data-bar" style="height: 40px;"></div>
+          <div class="data-bar" style="height: 65px; background: #10b981;"></div>
+          <div class="data-bar" style="height: 85px;"></div>
+          <div class="data-bar" style="height: 50px;"></div>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Card Body -->
+      <div class="card-body">
+        <h3 class="card-job-title" title="{{ job.title }}">{{ job.title }}</h3>
+        
+        <!-- ZK Eligibility Criteria Pill Box -->
+        <div class="card-zk-criteria">
+          <div class="criteria-title">
+            <span>Public ZK Criteria</span>
+            <i class="fa-solid fa-lock" style="font-size: 9px;"></i>
+          </div>
+          <div class="criteria-list">
+            <span class="criteria-tag">Rating &ge; {{ job.min_rating }}★</span>
+            <span class="criteria-tag">Jobs &ge; {{ job.min_completed_jobs }}</span>
+            <span class="criteria-tag">On-time &ge; {{ job.min_on_time_rate }}%</span>
+            <span class="criteria-tag">Disputes &le; {{ job.max_disputes }}</span>
+          </div>
+        </div>
+
+        <button 
+          type="button"
+          class="btn btn-outline apply-btn-trigger" 
+          style="width: 100%; margin-top: 6px; font-size: 13px; padding: 8px 12px;"
+          data-job-id="{{ job.id }}"
+          data-job-title="{{ job.title|e }}"
+          data-job-budget="{{ job.budget }}"
+          data-min-rating="{{ job.min_rating }}"
+          data-min-jobs="{{ job.min_completed_jobs }}"
+          data-min-ontime="{{ job.min_on_time_rate }}"
+          data-max-disputes="{{ job.max_disputes }}"
+        >
+          <i class="fa-solid fa-shield-halved" style="color: #059669;"></i> Verify ZK Proof &amp; Apply
+        </button>
+
+        <!-- Card Footer with Client Info & Price -->
+        <div class="card-footer">
+          <div class="client-author">
+            <div class="author-mini-avatar">{{ job.client_initials }}</div>
+            <div class="author-info">
+              <span class="author-name">{{ job.client_name }}</span>
+              <span class="author-rating">
+                <i class="fa-solid fa-star star-icon"></i> 4.9 (Client)
+              </span>
+            </div>
+          </div>
+
+          <div class="card-price">
+            <span class="price-label">Budget</span>
+            <span class="price-amount">${{ "%.0f"|format(job.budget) }}</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Your Applications (if any) -->
+  {% if user_applications %}
+  <div style="margin-top: 48px;">
+    <div class="section-header">
+      <h2 class="section-title">Your Submitted Applications (With Zero-Knowledge Proofs)</h2>
+    </div>
+    <div style="background: #ffffff; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); overflow: hidden;">
+      <table class="db-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th>Job Title</th>
+            <th>Category</th>
+            <th>Proposed Bid</th>
+            <th>ZK Verification Status</th>
+            <th>Proof Hash / Identifier</th>
+            <th>Submitted At</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for app in user_applications %}
+          <tr>
+            <td style="font-weight: 600;">{{ app.title }}</td>
+            <td><span class="criteria-tag">{{ app.category }}</span></td>
+            <td style="font-weight: 700; color: #0f172a;">${{ "%.0f"|format(app.bid_amount) }}</td>
+            <td>
+              <span class="zk-status-badge zk-status-success">
+                <i class="fa-solid fa-check-circle"></i> ZK Proof Verified
+              </span>
+            </td>
+            <td><code style="font-size: 11px; background: #f1f5f9; padding: 2px 6px; border-radius: 4px;">{{ app.zk_proof_hex[:24] }}...</code></td>
+            <td style="color: #64748b;">{{ app.applied_at }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+
+<!-- ZK Application Modal -->
+<div id="applyModal" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 id="modalJobTitle">Apply with ZK Proof</h3>
+      <button onclick="closeApplyModal()" class="close-btn">&times;</button>
+    </div>
+
+    <div class="modal-content">
+      <form id="applyForm" method="POST">
+        <input type="hidden" id="modalJobId" name="job_id">
+        <input type="hidden" id="zkProofHex" name="zk_proof_hex">
+        <input type="hidden" id="zkPublicInputs" name="zk_public_inputs">
+
+        <!-- Job Criteria Box -->
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px; margin-bottom: 20px;">
+          <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: #64748b; margin-bottom: 6px;">
+            Public Job Eligibility Requirements:
+          </div>
+          <div id="modalCriteriaList" style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <!-- Injected via JS -->
+          </div>
+        </div>
+
+        <!-- Real-time Noir Eligibility Evaluation -->
+        <div id="eligibilityCheckStatus" style="padding: 12px 16px; border-radius: 8px; margin-bottom: 18px; font-size: 13px;">
+          <i class="fa-solid fa-spinner fa-spin"></i> Checking your private credentials against Noir circuit requirements...
+        </div>
+
+        <!-- Noir Witness & Proof Simulation Terminal -->
+        <div style="margin-bottom: 18px;">
+          <label style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: #475569; display: flex; align-items: center; justify-content: space-between;">
+            <span>Noir Circuit &amp; Barretenberg Execution Preview</span>
+            <span style="font-size: 11px; font-weight: 600; color: #10b981;"><i class="fa-solid fa-code"></i> eligibility_circuit.nr</span>
+          </label>
+          <div id="zkCodePreview" class="zk-proof-box">
+// Waiting for circuit synthesis...
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+          <div>
+            <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Your Bid Amount ($)</label>
+            <input type="number" id="modalBidAmount" name="bid_amount" required style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px;">
+          </div>
+          <div>
+            <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Delivery Time</label>
+            <input type="text" value="3 days" readonly style="width: 100%; padding: 10px 14px; border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 8px; font-size: 14px; color: #64748b;">
+          </div>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Cover Letter / Application Note</label>
+          <textarea name="cover_note" rows="3" placeholder="Briefly describe your approach to this project..." style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 14px;"></textarea>
+        </div>
+
+        <div style="display: flex; gap: 12px; justify-content: flex-end;">
+          <button type="button" onclick="closeApplyModal()" class="btn btn-outline">Cancel</button>
+          <button type="submit" id="submitApplyBtn" class="btn btn-zk">
+            <i class="fa-solid fa-shield-halved"></i> Generate Proof &amp; Apply
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let currentJobId = null;
+
+function openApplyModal(jobId, jobTitle, budget, minRating, minJobs, minOntime, maxDisputes) {
+  currentJobId = jobId;
+  document.getElementById('modalJobTitle').innerText = 'Apply to: ' + jobTitle;
+  document.getElementById('modalBidAmount').value = budget;
+  document.getElementById('applyForm').action = '/jobs/' + jobId + '/apply';
+  
+  // Render criteria tags
+  const criteriaContainer = document.getElementById('modalCriteriaList');
+  criteriaContainer.innerHTML = `
+    <span class="criteria-tag">Rating &ge; ${minRating}★</span>
+    <span class="criteria-tag">Completed &ge; ${minJobs}</span>
+    <span class="criteria-tag">On-time &ge; ${minOntime}%</span>
+    <span class="criteria-tag">Disputes &le; ${maxDisputes}</span>
+  `;
+
+  // Reset proof terminal
+  const statusBox = document.getElementById('eligibilityCheckStatus');
+  const codeBox = document.getElementById('zkCodePreview');
+  const submitBtn = document.getElementById('submitApplyBtn');
+  
+  statusBox.className = '';
+  statusBox.style.background = '#f1f5f9';
+  statusBox.style.color = '#334155';
+  statusBox.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Querying private reputation credential...';
+  submitBtn.disabled = true;
+
+  // Open modal
+  document.getElementById('applyModal').classList.add('active');
+
+  // Fetch eligibility check from backend
+  fetch('/api/check-eligibility/' + jobId)
+    .then(r => r.json())
+    .then(data => {
+      if (data.eligible) {
+        statusBox.style.background = '#ecfdf5';
+        statusBox.style.color = '#065f46';
+        statusBox.style.border = '1px solid #a7f3d0';
+        statusBox.innerHTML = '<i class="fa-solid fa-circle-check" style="color: #10b981;"></i> <strong>Eligible!</strong> Your private credentials satisfy all public constraints without revealing exact job counts or client identities.';
+
+        // Synthesize simulated Barretenberg proof
+        const simulatedProof = '0x' + Array.from({length: 32}, () => Math.floor(Math.random()*16).toString(16)).join('');
+        document.getElementById('zkProofHex').value = simulatedProof;
+        document.getElementById('zkPublicInputs').value = JSON.stringify(data.noir_public_inputs);
+
+        codeBox.innerHTML = `[Noir main.nr Compiled AST]
+> Private witness: rating=${data.noir_private_inputs.rating}, jobs=${data.noir_private_inputs.completed_jobs}, ontime=${data.noir_private_inputs.on_time_rate}%, disputes=${data.noir_private_inputs.disputes} [KEPT SECRET]
+> Public inputs: min_rating=${data.noir_public_inputs.min_rating}, min_jobs=${data.noir_public_inputs.min_completed_jobs}, min_ontime=${data.noir_public_inputs.min_on_time_rate}%, max_disputes=${data.noir_public_inputs.max_disputes}
+> Dynamic Prover.toml generated from database
+[Ready for Barretenberg UltraHonk Engine]
+> Clicking "Generate Proof & Apply" will run:
+   1. python3 generate_circuit.py (parameterizes main.nr)
+   2. python3 generate_prover.py (populates Prover.toml)
+   3. nargo execute witness (solves private witness)
+   4. bb prove & bb verify (cryptographically verifies UltraHonk proof)`;
+
+        submitBtn.disabled = false;
+      } else {
+        statusBox.style.background = '#fef2f2';
+        statusBox.style.color = '#991b1b';
+        statusBox.style.border = '1px solid #fecaca';
+        statusBox.innerHTML = '<i class="fa-solid fa-circle-xmark" style="color: #ef4444;"></i> <strong>Ineligible:</strong> Your current stats do not meet the minimum requirements for this specific job.';
+        
+        codeBox.innerHTML = `[Noir Constraint Failure]
+> assert(freelancer_stat >= requirement) failed!
+> Circuit cannot generate a valid UltraHonk proof without satisfying all assertions.`;
+        submitBtn.disabled = true;
+      }
+    })
+    .catch(err => {
+      statusBox.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Must be logged in as a freelancer to verify eligibility.';
+      submitBtn.disabled = true;
+    });
+}
+
+function closeApplyModal() {
+  document.getElementById('applyModal').classList.remove('active');
+}
+
+// Bind button triggers via dataset attributes cleanly
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.apply-btn-trigger').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const d = this.dataset;
+      openApplyModal(
+        d.jobId,
+        d.jobTitle,
+        parseFloat(d.jobBudget),
+        parseFloat(d.minRating),
+        parseInt(d.minJobs),
+        parseInt(d.minOntime),
+        parseInt(d.maxDisputes)
+      );
+    });
+  });
+});
+</script>
+{% endblock %}

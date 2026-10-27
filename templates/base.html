@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Freela - Privacy-Preserving ZK Marketplace{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="{{ url_for('home') }}" class="brand">
+        Freela
+        <span class="brand-zk-tag"><i class="fa-solid fa-shield-halved"></i> ZK Proofs</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="{{ url_for('home') }}" class="nav-link active">Home</a></li>
+        <li><a href="{{ url_for('home') }}#browse" class="nav-link">Browse Jobs</a></li>
+        <li><a href="{{ url_for('database_viewer') }}" class="nav-link" target="_blank"><i class="fa-solid fa-database"></i> Review Database</a></li>
+        {% if session.get('role') == 'client' %}
+        <li><a href="{{ url_for('create_job') }}" class="nav-link"><i class="fa-solid fa-plus-circle"></i> Post Job</a></li>
+        {% endif %}
+      </ul>
+
+      <div class="nav-actions">
+        <!-- Quick Role Switcher for seamless demo testing -->
+        <div style="font-size: 13px; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
+          <span>Switch demo user:</span>
+          <select onchange="window.location.href='/switch-user/' + this.value" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 12px; background: #fff; cursor: pointer;">
+            <option value="3" {% if session.get('user_id') == 3 %}selected{% endif %}>Freelancer: alex_dev (4.9★, 120 jobs)</option>
+            <option value="4" {% if session.get('user_id') == 4 %}selected{% endif %}>Freelancer: sara_design (4.8★, 95 jobs)</option>
+            <option value="1" {% if session.get('user_id') == 1 %}selected{% endif %}>Client: Alice Morgan</option>
+            <option value="2" {% if session.get('user_id') == 2 %}selected{% endif %}>Client: Nexus TechCorp</option>
+          </select>
+        </div>
+
+        <button class="icon-btn" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+        </button>
+
+        {% if session.get('username') %}
+        <div class="user-badge" title="Role: {{ session.get('role') }}">
+          <div class="avatar-circle">{{ session.get('initials', 'U') }}</div>
+          <div>
+            <div class="user-meta-name">{{ session.get('full_name', session.get('username')) }}</div>
+            <div class="user-meta-role">{{ session.get('role') }}</div>
+          </div>
+          <a href="{{ url_for('logout') }}" style="margin-left: 6px; color: #94a3b8;" title="Logout"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+        </div>
+        {% else %}
+        <a href="{{ url_for('login') }}" class="btn btn-primary" style="padding: 8px 16px; font-size: 13px;">Login</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <!-- Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div style="max-width: 1240px; margin: 16px auto 0 auto; padding: 0 24px;">
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+            <span><i class="fa-solid fa-circle-info" style="margin-right: 8px;"></i> {{ message }}</span>
+            <button onclick="this.parentElement.remove()" style="background: none; border: none; cursor: pointer; color: inherit; font-size: 16px;">&times;</button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Body Content -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer style="border-top: 1px solid var(--border-subtle); padding: 32px 24px; text-align: center; color: var(--text-muted); font-size: 13px; margin-top: 48px; background: #fff;">
+    <div style="max-width: 1240px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+      <div>
+        <strong>Freela ZK-Marketplace</strong> &bull; CS670 Applied Cryptography & Zero-Knowledge Systems
+      </div>
+      <div style="display: flex; gap: 20px;">
+        <a href="{{ url_for('database_viewer') }}" style="color: #059669; font-weight: 600;"><i class="fa-solid fa-database"></i> Inspect freela.db (SQLite)</a>
+        <span>Powered by Noir & Barretenberg</span>
+      </div>
+    </div>
+  </footer>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>
